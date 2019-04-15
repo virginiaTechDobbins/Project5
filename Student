@@ -1,0 +1,69 @@
+package musicsurvey;
+
+public class Student {
+    private int num;
+    private String date;
+    private Major major;
+    private Hobby hobby;
+    private Region region;
+    private String[] responses;
+    
+    public Student(int num, String date, Major major, Hobby hobby, Region region, String[] responses) {
+        this.num = num;
+        this.date = date;
+        this.major = major;
+        this.hobby = hobby;
+        this.region = region;
+        this.responses = responses;
+    }
+    
+    public int getName() {
+        return num;
+    }
+    
+    public String getDate() {
+        return date;
+    }
+    
+    public Major getMajor() {
+        return major;
+    }
+    
+    public Hobby getHobby() {
+        return hobby;
+    }
+    
+    public Region getRegion() {
+        return region;
+    }
+    
+    public String[] getResponses() {
+        return responses;
+    }
+    
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        s.append(num + ",");
+        s.append(date + ",");
+        s.append(major + ",");
+        s.append(region + ",");
+        s.append(hobby + ",");
+        
+        int i = 0;
+        boolean firstItem = true;
+        while (i < responses.length) {
+            if (!firstItem) {
+                s.append(",");
+            }
+            else {
+                firstItem = false;
+            }
+            s.append(responses[i]);
+            i++;
+        }
+        
+        s.append("\n");
+        
+        return s.toString();
+    }
+}
