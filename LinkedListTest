@@ -1,5 +1,7 @@
 package prj5;
 
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import student.TestCase;
 
 // Virginia Tech Honor Code Pledge:
@@ -314,4 +316,32 @@ public class LinkedListTest extends TestCase {
         assertEquals(-1, list.getIndex("e"));
     }
 
+
+    /**
+     * tests the iterator
+     */
+    public void testIterator() {
+        Iterator<String> iter = list.iterator();
+
+        list.add("a");
+        list.add("b");
+        list.add("c");
+        list.add("d");
+
+        assertTrue(iter.hasNext());
+        assertEquals("a", iter.next());
+        assertEquals("b", iter.next());
+        assertEquals("c", iter.next());
+        assertEquals("d", iter.next());
+        assertFalse(iter.hasNext());
+
+        Exception thrown = null;
+        try {
+            iter.next();
+        }
+        catch (Exception e) {
+            thrown = e;
+        }
+        assertTrue(thrown instanceof NoSuchElementException);
+    }
 }
