@@ -4,7 +4,7 @@
 // I will not lie, cheat, or steal, nor will I accept the actions of those who
 // do.
 // -- Marcus Taylor <marcus99>
-package musicsurvey;
+package prj5;
 
 /**
  * Majors to be chosen from by students.
