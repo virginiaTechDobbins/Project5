@@ -393,17 +393,17 @@ public class LinkedList<E> {
      * converts the contents of the list to a string
      */
     public String toString() {
-        DoublyLinkedNode<E> iter = head.getNext();
-        String string = "";
+        StringBuilder string = new StringBuilder();
+        Iterator<E> i = iterator();
         if (!this.isEmpty()) {
-            while (iter.getNext() != tail) {
-                string += iter.data.toString();
-                string += ", ";
-                iter = iter.getNext();
+            while (i.hasNext()) {
+                string.append(i.next());
+                if (i.hasNext()) {
+                    string.append(", ");
+                }
             }
-            string += iter.data.toString();
         }
-        return string;
+        return string.toString();
     }
 
 
@@ -428,13 +428,18 @@ public class LinkedList<E> {
     }
 
 
+    public Iterator<E> iterator() {
+        return new ListIterator();
+    }
+
+
     /**
      * Iterator for the list
      * 
      * @author Anthony
      * @version 19.4.15
      */
-    public class ListIterator implements Iterator<E> {
+    private class ListIterator implements Iterator<E> {
         // iterating node
         private DoublyLinkedNode<E> curr;
 
@@ -443,7 +448,7 @@ public class LinkedList<E> {
          * standard constructor
          */
         public ListIterator() {
-            curr = head.nextNode;
+            curr = head;
         }
 
 
@@ -470,7 +475,5 @@ public class LinkedList<E> {
                 throw new NoSuchElementException();
             }
         }
-
     }
-
 }
