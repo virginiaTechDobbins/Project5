@@ -1,5 +1,8 @@
 package prj5;
 
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
 // Virginia Tech Honor Code Pledge:
 //
 // As a Hokie, I will conduct myself with honor and integrity at all times.
@@ -422,6 +425,52 @@ public class LinkedList<E> {
             }
         }
         return -1;
+    }
+
+
+    /**
+     * Iterator for the list
+     * 
+     * @author Anthony
+     * @version 19.4.15
+     */
+    public class ListIterator implements Iterator<E> {
+        // iterating node
+        private DoublyLinkedNode<E> curr;
+
+
+        /**
+         * standard constructor
+         */
+        public ListIterator() {
+            curr = head.nextNode;
+        }
+
+
+        /**
+         * checks if the iterator node has node after it
+         */
+        @Override
+        public boolean hasNext() {
+
+            return curr.nextNode != null && curr.nextNode != tail;
+        }
+
+
+        /**
+         * moves the node forward once
+         */
+        @Override
+        public E next() {
+            if (this.hasNext()) {
+                curr = curr.nextNode;
+                return curr.getData();
+            }
+            else {
+                throw new NoSuchElementException();
+            }
+        }
+
     }
 
 }
