@@ -19,13 +19,13 @@ public class Input {
         DataProcessor dataProc;
         String buf;
         String buf2;
+        String buf3;
         if (args.length == 2) {
             DataReader read = new DataReader(args[0], args[1]);
             dataProc = read.getProcessor();
             LinkedList<Song> songList = dataProc.reorderByData(3);
             
             for (int i = 0; i < songList.getSize(); i++) {
-                System.out.println("");
                 System.out.println("Song Title: " + songList.get(i).
                     getTitle());
                 System.out.println("Song Artist: " + songList.get(i).
@@ -35,24 +35,40 @@ public class Input {
                 System.out.println("Song Year: " + songList.get(i).
                     getYear());
                 System.out.println("Heard");
-                buf = "reading:" + dataProc.calculateResponses(
-                    songList.get(i), 1, 1, 1) * 100;
-                buf += "art:" + dataProc.calculateResponses(
-                    songList.get(i), 1, 2, 1) * 100;
-                buf += "sports:" + dataProc.calculateResponses(
-                    songList.get(i), 1, 3, 1) * 100;   
-                buf += "music:" + dataProc.calculateResponses(
-                    songList.get(i), 1, 4, 1) * 100;
+                buf3 = String.valueOf(dataProc.calculateResponses(
+                    songList.get(i), 1, 1, 1) * 100);
+                buf3 = buf3.substring(0, buf3.length() - 1);
+                buf = "reading:" + buf3;
+                buf3 = String.valueOf(dataProc.calculateResponses(
+                    songList.get(i), 1, 2, 1) * 100);
+                buf3 = buf3.substring(0, buf3.length() - 1);
+                buf += " art:" + buf3;
+                buf3 = String.valueOf(dataProc.calculateResponses(
+                    songList.get(i), 1, 3, 1) * 100);
+                buf3 = buf3.substring(0, buf3.length() - 1);
+                buf += " sports:" + buf3;  
+                buf3 = String.valueOf(dataProc.calculateResponses(
+                    songList.get(i), 1, 4, 1) * 100);
+                buf3 = buf3.substring(0, buf3.length() - 1);
+                buf += " music:" + buf3;
                 System.out.println(buf);
                 System.out.println("Likes");
-                buf2 = "reading:" + dataProc.calculateResponses(
-                    songList.get(i), 1, 1, 2) * 100;
-                buf2 += "art:" + dataProc.calculateResponses(
-                    songList.get(i), 1, 2, 2) * 100;
-                buf2 += "sports:" + dataProc.calculateResponses(
-                    songList.get(i), 1, 3, 2) * 100;
-                buf2 += "music:" + dataProc.calculateResponses(
-                    songList.get(i), 1, 4, 2) * 100;
+                buf3 = String.valueOf(dataProc.calculateResponses(
+                    songList.get(i), 1, 1, 2) * 100);
+                buf3 = buf3.substring(0, buf3.length() - 1);
+                buf2 = "reading:" + buf3;
+                buf3 = String.valueOf(dataProc.calculateResponses(
+                    songList.get(i), 1, 2, 2) * 100);
+                buf3 = buf3.substring(0, buf3.length() - 1);
+                buf2 += " art:" + buf3;
+                buf3 = String.valueOf(dataProc.calculateResponses(
+                    songList.get(i), 1, 3, 2) * 100);
+                buf3 = buf3.substring(0, buf3.length() - 1);
+                buf2 += " sports:" + buf3;
+                buf3 = String.valueOf(dataProc.calculateResponses(
+                    songList.get(i), 1, 4, 2) * 100);
+                buf3 = buf3.substring(0, buf3.length() - 1);
+                buf2 += " music:" + buf3;
                 System.out.println(buf2);
             }
            
@@ -69,27 +85,44 @@ public class Input {
                 System.out.println("Song Year: " + songList.get(i).
                     getYear());
                 System.out.println("Heard");
-                buf = "reading:" + dataProc.calculateResponses(
-                    songList.get(i), 1, 1, 1) * 100;
-                buf += "art:" + dataProc.calculateResponses(
-                    songList.get(i), 1, 2, 1) * 100;
-                buf += "sports:" + dataProc.calculateResponses(
-                    songList.get(i), 1, 3, 1) * 100;   
-                buf += "music:" + dataProc.calculateResponses(
-                    songList.get(i), 1, 4, 1) * 100;
+                buf3 = String.valueOf(dataProc.calculateResponses(
+                    songList.get(i), 1, 1, 1) * 100);
+                buf3 = buf3.substring(0, buf3.length() - 1);
+                buf = "reading:" + buf3;
+                buf3 = String.valueOf(dataProc.calculateResponses(
+                    songList.get(i), 1, 2, 1) * 100);
+                buf3 = buf3.substring(0, buf3.length() - 1);
+                buf += " art:" + buf3;
+                buf3 = String.valueOf(dataProc.calculateResponses(
+                    songList.get(i), 1, 3, 1) * 100);
+                buf3 = buf3.substring(0, buf3.length() - 1);
+                buf += " sports:" + buf3;  
+                buf3 = String.valueOf(dataProc.calculateResponses(
+                    songList.get(i), 1, 4, 1) * 100);
+                buf3 = buf3.substring(0, buf3.length() - 1);
+                buf += " music:" + buf3;
                 System.out.println(buf);
                 System.out.println("Likes");
-                buf2 = "reading:" + dataProc.calculateResponses(
-                    songList.get(i), 1, 1, 2) * 100;
-                buf2 += "art:" + dataProc.calculateResponses(
-                    songList.get(i), 1, 2, 2) * 100;
-                buf2 += "sports:" + dataProc.calculateResponses(
-                    songList.get(i), 1, 3, 2) * 100;
-                buf2 += "music:" + dataProc.calculateResponses(
-                    songList.get(i), 1, 4, 2) * 100;
+                buf3 = String.valueOf(dataProc.calculateResponses(
+                    songList.get(i), 1, 1, 2) * 100);
+                buf3 = buf3.substring(0, buf3.length() - 1);
+                buf2 = "reading:" + buf3;
+                buf3 = String.valueOf(dataProc.calculateResponses(
+                    songList.get(i), 1, 2, 2) * 100);
+                buf3 = buf3.substring(0, buf3.length() - 1);
+                buf2 += " art:" + buf3;
+                buf3 = String.valueOf(dataProc.calculateResponses(
+                    songList.get(i), 1, 3, 2) * 100);
+                buf3 = buf3.substring(0, buf3.length() - 1);
+                buf2 += " sports:" + buf3;
+                buf3 = String.valueOf(dataProc.calculateResponses(
+                    songList.get(i), 1, 4, 2) * 100);
+                buf3 = buf3.substring(0, buf3.length() - 1);
+                buf2 += " music:" + buf3;
                 System.out.println(buf2);
             }
         }
         
     }
 }
+
