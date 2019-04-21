@@ -1,5 +1,6 @@
 package prj5;
 
+import java.util.Iterator;
 /**
  * DataProcessor will do all of the back end calculations for the Project 5
  * Music survey response sorter 
@@ -11,6 +12,10 @@ public class DataProcessor {
     private LinkedList<Song> songList;
     private LinkedList<Student> studentList;
     private LinkedList<Song> questionOrder;
+    private LinkedList<String> artistOrder;
+    private LinkedList<String> genreOrder;
+    private LinkedList<String> titleOrder;
+    
     
     /**
      * DataProcessor(LinkedList<Song>, LinkedList<Student>) is the only 
@@ -21,6 +26,17 @@ public class DataProcessor {
     public DataProcessor(LinkedList<Song> inSongs, 
         LinkedList<Student> inStudents) {
         this.songList = inSongs;
+        this.artistOrder = this.orderArtists();
+        this.genreOrder = this.orderGenre();
+        this.titleOrder = this.orderTitles();
+        //System.out.println("The question order is " + 
+        //    questionOrder.toString());
+        System.out.println("The artist order is " + 
+            artistOrder.toString());
+        System.out.println("The genre order is " + 
+            genreOrder.toString());
+        System.out.println("The title order is " + 
+            titleOrder.toString());
         this.questionOrder = new LinkedList<Song>();
         for (int i = 0; i < inSongs.getSize(); i++) {
             questionOrder.add(inSongs.get(i));
@@ -55,6 +71,7 @@ public class DataProcessor {
             buf = getIndexOfSmallest(i, category);
             swapSongs(i, buf);
         }
+        
         return this.songList;
     }
     
@@ -96,6 +113,9 @@ public class DataProcessor {
                 "not in the list of songs.");
         }
         double totalOfCategory = getTotalOfCategory(enumer, val);
+        if (totalOfCategory == 0.0) {
+            return 0.0;
+        }
         double correctResponse = getNumberOfCorrect(song, enumer, val, resp);
         return correctResponse / totalOfCategory;
     }
@@ -109,11 +129,12 @@ public class DataProcessor {
      */
     private void swapSongs(int lesserIndex, int biggerIndex) {
         if (lesserIndex != biggerIndex) {
-            Song buf = this.songList.get(lesserIndex);
+            Song lesser = this.songList.get(lesserIndex);
+            Song bigger = this.songList.get(biggerIndex);
             this.songList.remove(lesserIndex);
-            this.songList.add(lesserIndex, songList.get(biggerIndex));
+            this.songList.add(lesserIndex, bigger);
             this.songList.remove(biggerIndex);
-            this.songList.add(biggerIndex, buf);
+            this.songList.add(biggerIndex, lesser);
         }
     }
     
@@ -125,12 +146,16 @@ public class DataProcessor {
      *                 2 search by song title
      *                 3 search by genre
      *                 4 search by date
-     * @return
+     * @return smallest the index of the item in a list with the smallest 
+     *                  comparison value within the specified bounds 
      */
     private int getIndexOfSmallest(int beginIndex, int category) {
         //for category = 1, 2, 3, the comparing variable type is going to 
         //be a toLowerCase String object, and for 4, the comparing variable 
         //type will be int
+        if (beginIndex == this.songList.getSize() - 1) {
+            return beginIndex;
+        }
         int smallest = beginIndex;
         int compareValue = getCompareValue(this.songList.get(smallest), 
             category);
@@ -152,16 +177,16 @@ public class DataProcessor {
      *                 2 search by song title
      *                 3 search by genre
      *                 4 search by date
-     * @return 
+     * @return comparisonValue is value which will be compared
      */
     private int getCompareValue(Song song, int category) {
         int val;
         switch(category) {
-            case 1: val = song.getArtist().toLowerCase().codePointAt(0);
+            case 1: val = artistOrder.getIndex(song.getArtist());
                 break;
-            case 2: val = song.getTitle().toLowerCase().codePointAt(0);
+            case 2: val = titleOrder.getIndex(song.getTitle());
                 break;
-            case 3: val = song.getGenre().codePointAt(0); 
+            case 3: val = genreOrder.getIndex(song.getGenre()); 
                 break;
             default: val = song.getYear();
                 break;
@@ -169,7 +194,136 @@ public class DataProcessor {
         return val;
     }
     
+    /**
+     * orderArtist(Song) will order the  
+     * their alphabetical ranking. IE an artist will be rated lower is their
+     * name comes before others in an alpabetical sorting of the names.
+     * @param song
+     * @return ranking the integer that encodes the relative ranking of the 
+     *                 artist name in comarison to others 
+     */
+    private LinkedList<String> orderArtists() {
+        LinkedList<String> artists = new LinkedList<String>();
+        String buf1, buf2, buffer;
+        for (Iterator<Song> iter = this.songList.iterator(); iter.hasNext();
+            ) {
+            buffer = iter.next().getArtist();
+            if (!artists.contains(buffer)) {
+                artists.add(buffer);
+            }
+            
+        }
+        for (int i = 0; i < artists.getSize(); i++) {
+            for (int n = i + 1; n < artists.getSize(); n++) {
+                if (comesFirst(artists.get(n).toLowerCase(), 
+                    artists.get(n - 1).toLowerCase())){
+                    buf1 = artists.get(n - 1);
+                    buf2 = artists.get(n);
+                    artists.remove(n - 1);
+                    artists.add(n - 1, buf2);
+                    artists.remove(n);
+                    artists.add(n, buf1);
+                }
+            }
+        }
+        return artists;
+        
+    }
     
+    /**
+     * orderTitles() will process the input data and initalize the private 
+     * instance field to have the order of the titles of songs in memory 
+     * for purposes of reorganizing when prompted by the user
+     * @return
+     */
+    private LinkedList<String> orderTitles() {
+        LinkedList<String> titles = new LinkedList<String>();
+        String buf1, buf2;
+        for (Iterator<Song> iter = this.songList.iterator(); iter.hasNext();
+            ) {
+            titles.add(iter.next().getTitle());
+        }
+        for (int i = 0; i < titles.getSize(); i++) {
+            for (int n = i + 1; n < titles.getSize(); n++) {
+                if (comesFirst(titles.get(n).toLowerCase(), 
+                    titles.get(n - 1).toLowerCase())){
+                    buf1 = titles.get(n - 1);
+                    buf2 = titles.get(n);
+                    titles.remove(n - 1);
+                    titles.add(n - 1, buf2);
+                    titles.remove(n);
+                    titles.add(n, buf1);
+                }
+            }
+        }
+        return titles;
+    }
+    
+    /**
+     * orderTitles() will process the input data and initalize the private 
+     * instance field to have the order of the titles of songs in memory 
+     * for purposes of reorganizing when prompted by the user
+     * @return
+     */
+    private LinkedList<String> orderGenre() {
+        LinkedList<String> genres = new LinkedList<String>();
+        String buf1, buf2, buffer;
+        for (Iterator<Song> iter = this.songList.iterator(); iter.hasNext();
+            ) {
+            buffer = iter.next().getGenre();
+            if (!genres.contains(buffer)) {
+                genres.add(buffer);
+            }
+        }
+        for (int i = 0; i < genres.getSize(); i++) {
+            for (int n = i + 1; n < genres.getSize(); n++) {
+                if (comesFirst(genres.get(n), 
+                    genres.get(n - 1))){
+                    buf1 = genres.get(n - 1);
+                    buf2 = genres.get(n);
+                    genres.remove(n - 1);
+                    genres.add(n - 1, buf2);
+                    genres.remove(n);
+                    genres.add(n, buf1);
+                }
+            }
+        }
+        return genres;
+    }
+    
+    
+    /**
+     * comesFirst(String, String)
+     * @param first the string that comes first
+     * @param second the string that comes second
+     * @return cameFirst true if the first argument string comes first
+     *                   alphabetically,
+     *                   false if the second string argument comes first
+     *                   alphabetically
+     */
+    private boolean comesFirst(String first, String second) {
+        int size;
+        boolean cameFirst;
+        if (first.length() > second.length()) {
+            size = second.length();
+            cameFirst = false;
+        }
+        else {
+            size = first.length();
+            cameFirst = true;
+        }
+        for (int i = 0; i < size; i++) {
+            if (first.codePointAt(i) > second.codePointAt(i)) {
+                cameFirst = true;
+                break;
+            }
+            else if (first.codePointAt(i) < second.codePointAt(i)) {
+                cameFirst = false;
+                break;
+            }
+        }
+        return cameFirst;
+    }
     
     /**
      * getTotalOfCategory(int, int) will return the double encoding the total
@@ -311,8 +465,8 @@ public class DataProcessor {
         }
         int songIndex = this.questionOrder.getIndex(song);
         songIndex = 2 * songIndex;
-        if (resp == 1) {
-            songIndex = songIndex - 1;
+        if (resp == 2) {
+            songIndex = songIndex + 1;
         }
         for (int i = 0; i < correctSubdivision.getSize(); i++) {
             if (correctSubdivision.get(i).getResponses()[songIndex].
