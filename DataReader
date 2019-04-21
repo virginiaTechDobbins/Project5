@@ -22,6 +22,7 @@ public class DataReader {
     private LinkedList<Song> songList;
     private LinkedList<Student> studentList;
     private int responses;
+    private DataProcessor processor;
 
 
     /**
@@ -40,6 +41,26 @@ public class DataReader {
         songList = readSongFile(song);
         responses = songList.getSize() * 2;
         studentList = readStudentFile(student);
+        processor = new DataProcessor(songList, studentList);
+    }
+
+
+    /**
+     * getProcessor() will return to the client code the processor that
+     * has the data that was read in through the reader
+     */
+    public DataProcessor getProcessor() {
+        return processor;
+    }
+
+
+    /**
+     * getSongList() will return the song list
+     * 
+     * @return songlist the list of songs
+     */
+    public LinkedList<Song> getSongList() {
+        return this.songList;
     }
 
 
@@ -56,10 +77,67 @@ public class DataReader {
      */
     private LinkedList<Student> readStudentFile(String student)
         throws FileNotFoundException {
+        /*
+         * Programmers note 2019.04.20: The split methodology is not working
+         * for some reason.Keep getting an array index out of bounds exception
+         * for indicies >= 2 even though subsequent array indexes have already
+         * been accessed without proble. 
+         * Alternative, use a secondary scanner to scan each
+         * line using "," as a delimiter. Might also work.
+         * The code now compiles, but there are problems with the actual data
+         * reading in the tests.
+         */
         File newFile = new File(student);
         Scanner file = new Scanner(newFile);
         studentList = new LinkedList<Student>();
-
+        Scanner line;
+        file.nextLine();
+        int num, buf;
+        buf = responses - 1;
+        String date;
+        Major maj;
+        Region reg;
+        Hobby hob;
+        String[] resp = new String[responses];
+        //System.out.println("there were " + responses + "many responses");
+        while (file.hasNextLine()) {
+            line = new Scanner(file.nextLine());
+            line.useDelimiter(",");
+            num = line.nextInt();
+            date = line.next();
+            maj = enumMaj(line.next());
+            reg = enumReg(line.next());
+            hob = enumHob(line.next());
+            for (int i = 0; line.hasNext(); i++) {
+                resp[i] = line.next();
+                
+                //System.out.println(resp[i] + " was added at index " + i);
+                buf = i;
+            }
+            /*
+             * problem found and fixed: For data file lines were the last 
+             * or a few before the last were blank responses, "", the scanner
+             * would read them as not existing, so then reading them would 
+             * throw an exception or leave the last few entries of resp null,
+             * which would lead to null pointer exceptions when accessing them
+             * the code below should fill any remaining resp entries with ""
+             * blank strings if this were to happen with a particular input
+             * file. The tests indicate that they are reading properly.
+             */
+            if (buf != responses - 1) {
+                for (int n = buf + 1; n < responses; n++) {
+                    resp[n] = "";
+                }
+            }
+            line.close();
+            Student s = new Student(num, date, maj, hob, reg, resp);
+            studentList.add(s);
+            
+        }
+        file.close();
+        return studentList;
+        
+        /* split() implementation 
         String line = null;
         file.nextLine();
         while (file.hasNextLine()) {
@@ -71,14 +149,17 @@ public class DataReader {
             }
             int num = Integer.valueOf(line2[0]);
             String date = line2[1];
-            Hobby hob = enumHob(line2[4]);
+            
             Major maj = enumMaj(line2[2]);
             Region reg = enumReg(line2[3]);
+            Hobby hob = enumHob(line2[4]);
+            
             Student s = new Student(num, date, maj, hob, reg, resp);
             studentList.add(s);
         }
         file.close();
         return studentList;
+        */
     }
 
 
